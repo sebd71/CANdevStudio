@@ -4,7 +4,7 @@
 
 CanSignalDataModel::CanSignalDataModel()
     : ComponentModel("CanSignalData")
-    , _painter(std::make_unique<NodePainter>(headerColor1(), headerColor2()))
+    , _painter(std::make_unique<NodePainter>(headerColor()))
 {
     _label->setAlignment(Qt::AlignVCenter | Qt::AlignHCenter);
     _label->setFixedSize(75, 25);

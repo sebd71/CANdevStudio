@@ -135,7 +135,7 @@ QToolButton#toolSwitch {
     image: url(:/images/files/images/light/CANbus_icon_Switch.svg);
 }
 
-QCheckBox[type="iconSection"] {
+QCheckBox#pbRawLayer, QCheckBox#pbDeviceLayer, QCheckBox#pbSignalLayer {
     background: #dcdcdc;
     spacing: 43px;
     color: #767676;
@@ -146,27 +146,31 @@ QCheckBox#pbRawLayer {
 }
 
 QCheckBox#pbSignalLayer {
-    spacing: 46px;
+    spacing: 47px;
 }
 
-QCheckBox[type="iconSection"]::indicator {
+QCheckBox#pbRawLayer::indicator, QCheckBox#pbDeviceLayer::indicator, QCheckBox#pbSignalLayer::indicator {
     background: #dcdcdc;
     padding-top: 4px;
     width: 16px;
     height: 16px;
 }
 
-QCheckBox[type="iconSection"]::indicator:checked {
+QCheckBox#pbRawLayer::indicator:checked, #pbDeviceLayer::indicator:checked, #pbSignalLayer::indicator:checked {
     background: #dcdcdc;
     image: url(:/images/files/images/light/Angle-down-01.svg);
 }
 
-QCheckBox[type="iconSection"]::indicator:unchecked {
+QCheckBox#pbRawLayer::indicator:unchecked, #pbDeviceLayer::indicator:unchecked, #pbSignalLayer::indicator:unchecked {
     background: #dcdcdc;
     image: url(:/images/files/images/light/Angle-up-01.svg);
 }
 
-QWidget#deviceWidget, #rawWidget, #signalWidget {
+QWidget#deviceWidget {
+    background: #dcdcdc;
+}
+
+QWidget#rawWidget {
     background: #dcdcdc;
 }
 

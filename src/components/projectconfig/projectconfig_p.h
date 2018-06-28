@@ -12,6 +12,7 @@
 #include "cansignalsendermodel.h"
 #include "cansignalviewermodel.h"
 #include "flowviewwrapper.h"
+#include "iconlabel.h"
 #include "modeltoolbutton.h"
 #include "pcimpl.h"
 #include "ui_projectconfig.h"
@@ -21,9 +22,7 @@
 #include <log.h>
 #include <modelvisitor.h> // apply_model_visitor
 #include <nodes/Node>
-#include <candevicemodel.h>
 #include <propertyeditordialog.h>
-#include "iconlabel.h"
 
 namespace Ui {
 class ProjectConfigPrivate;
@@ -50,10 +49,10 @@ public:
         modelRegistry.registerModel<CanRawLoggerModel>();
         modelRegistry.registerModel<CanLoadModel>();
         modelRegistry.registerModel<CanSignalDataModel>();
-        modelRegistry.registerModel<CanSignalSenderModel>();
-        modelRegistry.registerModel<CanSignalDecoderModel>();
         modelRegistry.registerModel<CanSignalEncoderModel>();
+        modelRegistry.registerModel<CanSignalDecoderModel>();
         modelRegistry.registerModel<CanSignalViewerModel>();
+        modelRegistry.registerModel<CanSignalSenderModel>();
 
         _pcInt.setNodeCreatedCallback(
             &_graphScene, std::bind(&ProjectConfigPrivate::nodeCreatedCallback, this, std::placeholders::_1));
@@ -67,6 +66,9 @@ public:
 
         _ui->setupUi(this);
         _ui->layout->addWidget(_graphView);
+
+        _ui->scrollArea->setMinimumSize(165, 0);
+        _ui->scrollArea->setMaximumSize(165, 10000);
 
         connect(_ui->pbDeviceLayer, &QPushButton::toggled, _ui->deviceWidget, &QWidget::setVisible);
         _ui->pbDeviceLayer->setChecked(true);
@@ -86,36 +88,29 @@ public:
             bgColor = QColor(255, 255, 255);
         }
 
-        QLayoutItem* item;
-        while ((item = _ui->deviceWidget->layout()->takeAt(0)) != nullptr) {
-            delete item;
-        }
-        while ((item = _ui->rawWidget->layout()->takeAt(0)) != nullptr)
-        {
-            delete item;
-        }
-        while ((item = _ui->signalWidget->layout()->takeAt(0)) != nullptr)
-        {
-            delete item;
-        }
+        auto cleanIconWidgets = [](QWidget* w) {
+            QLayoutItem* item;
+            while ((item = w->layout()->takeAt(0)) != nullptr) {
+                delete item->widget();
+                delete item;
+            }
+        };
 
-        _ui->deviceWidget->layout()->addWidget(
-            new IconLabel("CanDevice", CanDeviceModel::headerColor1(), CanDeviceModel::headerColor2(), bgColor));
-        _ui->rawWidget->layout()->addWidget(new IconLabel(
-            "CanRawSender", CanRawSenderModel::headerColor1(), CanRawSenderModel::headerColor2(), bgColor));
-        _ui->rawWidget->layout()->addWidget(
-            new IconLabel("CanRawView", CanRawViewModel::headerColor1(), CanRawViewModel::headerColor2(), bgColor));
-        _ui->rawWidget->layout()->addWidget(
-            new IconLabel("CanRawPlayer", CanRawPlayerModel::headerColor1(), CanRawPlayerModel::headerColor2(), bgColor));
-        _ui->rawWidget->layout()->addWidget(
-            new IconLabel("CanRawLogger", CanRawLoggerModel::headerColor1(), CanRawLoggerModel::headerColor2(), bgColor));
-        _ui->rawWidget->layout()->addWidget(
-            new IconLabel("CanLoad", CanLoadModel::headerColor1(), CanLoadModel::headerColor2(), bgColor));
-        _ui->signalWidget->layout()->addWidget(new IconLabel("CanSignalData", CanSignalDataModel::headerColor1(), CanSignalDataModel::headerColor2(), bgColor));
-        _ui->signalWidget->layout()->addWidget(new IconLabel("CanSignalDecoder", CanSignalDecoderModel::headerColor1(), CanSignalDecoderModel::headerColor2(), bgColor));
-        _ui->signalWidget->layout()->addWidget(new IconLabel("CanSignalEncoder", CanSignalEncoderModel::headerColor1(), CanSignalEncoderModel::headerColor2(), bgColor));
-        _ui->signalWidget->layout()->addWidget(new IconLabel("CanSignalSender", CanSignalSenderModel::headerColor1(), CanSignalSenderModel::headerColor2(), bgColor));
-        _ui->signalWidget->layout()->addWidget(new IconLabel("CanSignalViewer", CanSignalViewerModel::headerColor1(), CanSignalViewerModel::headerColor2(), bgColor));
+        cleanIconWidgets(_ui->deviceWidget);
+        cleanIconWidgets(_ui->rawWidget);
+        cleanIconWidgets(_ui->signalWidget);
+
+        _ui->deviceWidget->layout()->addWidget(new IconLabel("CanDevice", CanDeviceModel::headerColor(), bgColor));
+        _ui->rawWidget->layout()->addWidget(new IconLabel("CanRawSender", CanRawSenderModel::headerColor(), bgColor));
+        _ui->rawWidget->layout()->addWidget(new IconLabel("CanRawView", CanRawViewModel::headerColor(), bgColor));
+        _ui->rawWidget->layout()->addWidget(new IconLabel("CanRawPlayer", CanRawPlayerModel::headerColor(), bgColor));
+        _ui->rawWidget->layout()->addWidget(new IconLabel("CanRawLogger", CanRawLoggerModel::headerColor(), bgColor));
+        _ui->rawWidget->layout()->addWidget(new IconLabel("CanLoad", CanLoadModel::headerColor(), bgColor));
+        _ui->signalWidget->layout()->addWidget(new IconLabel("CanSignalData", CanSignalDataModel::headerColor(), bgColor));
+        _ui->signalWidget->layout()->addWidget(new IconLabel("CanSignalDecoder", CanSignalDecoderModel::headerColor(), bgColor));
+        _ui->signalWidget->layout()->addWidget(new IconLabel("CanSignalEncoder", CanSignalEncoderModel::headerColor(), bgColor));
+        _ui->signalWidget->layout()->addWidget(new IconLabel("CanSignalSender", CanSignalSenderModel::headerColor(), bgColor));
+        _ui->signalWidget->layout()->addWidget(new IconLabel("CanSignalViewer", CanSignalViewerModel::headerColor(), bgColor));
     }
 
     ~ProjectConfigPrivate() {}

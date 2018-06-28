@@ -25,14 +25,9 @@ public:
     void setInData(std::shared_ptr<NodeData>, PortIndex) override {}
     QtNodes::NodePainterDelegate* painterDelegate() const override;
 
-    static QColor headerColor1()
+    static QColor headerColor()
     {
         return QColor(85, 95, 195);
-    }
-
-    static QColor headerColor2()
-    {
-        return QColor(84, 84, 84);
     }
 
 public slots:
